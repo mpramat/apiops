@@ -190,7 +190,8 @@ public static class Program
             ListRestResources = provider.GetRequiredService<ListRestResources>(),
             Logger = provider.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Extractor)),
             ServiceDirectory = GetServiceDirectory(configuration),
-            ServiceUri = GetServiceUri(configuration, armEnvironment)
+            ServiceUri = GetServiceUri(configuration, armEnvironment),
+            ServiceUriNoWorkspace = GetServiceUriNoWorkspace(configuration, armEnvironment)
         };
     }
 
@@ -245,6 +246,22 @@ public static class Program
         }
         
         uri = uri.SetQueryParam("api-version", "2022-09-01-preview").ToUri();
+
+        return new ServiceUri(uri);
+    }
+
+    private static ServiceUri GetServiceUriNoWorkspace(IConfiguration configuration, ArmEnvironment armEnvironment)
+    {
+        var serviceName = configuration.TryGetValue("API_MANAGEMENT_SERVICE_NAME") ?? configuration.GetValue("apimServiceName");        
+
+        var uri = armEnvironment.Endpoint.AppendPathSegment("subscriptions")
+                                         .AppendPathSegment(configuration.GetValue("AZURE_SUBSCRIPTION_ID"))
+                                         .AppendPathSegment("resourceGroups")
+                                         .AppendPathSegment(configuration.GetValue("AZURE_RESOURCE_GROUP_NAME"))
+                                         .AppendPathSegment("providers/Microsoft.ApiManagement/service")
+                                         .AppendPathSegment(serviceName)
+                                         .SetQueryParam("api-version", "2022-09-01-preview")
+                                         .ToUri();
 
         return new ServiceUri(uri);
     }

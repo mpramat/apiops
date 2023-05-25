@@ -14,6 +14,7 @@ internal class Extractor : BackgroundService
     {
         public required ServiceDirectory ServiceDirectory { get; init; }
         public required ServiceUri ServiceUri { get; init; }
+        public required ServiceUri ServiceUriNoWorkspace { get; init; }
         public required DefaultApiSpecification DefaultApiSpecification { get; init; }
         public required ListRestResources ListRestResources { get; init; }
         public required GetRestResource GetRestResource { get; init; }
@@ -62,6 +63,7 @@ internal class Extractor : BackgroundService
     {
         await Service.Export(parameters.ServiceDirectory,
                              parameters.ServiceUri,
+                             parameters.ServiceUriNoWorkspace,
                              parameters.DefaultApiSpecification,
                              parameters.ApiNamesToExport,
                              parameters.ListRestResources,
