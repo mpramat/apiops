@@ -230,15 +230,21 @@ public static class Program
     private static ServiceUri GetServiceUri(IConfiguration configuration, ArmEnvironment armEnvironment)
     {
         var serviceName = configuration.TryGetValue("API_MANAGEMENT_SERVICE_NAME") ?? configuration.GetValue("apimServiceName");
+        var workspaceName = configuration.TryGetValue("API_MANAGEMENT_WORKSPACE") ?? string.Empty;
 
         var uri = armEnvironment.Endpoint.AppendPathSegment("subscriptions")
                                          .AppendPathSegment(configuration.GetValue("AZURE_SUBSCRIPTION_ID"))
                                          .AppendPathSegment("resourceGroups")
                                          .AppendPathSegment(configuration.GetValue("AZURE_RESOURCE_GROUP_NAME"))
                                          .AppendPathSegment("providers/Microsoft.ApiManagement/service")
-                                         .AppendPathSegment(serviceName)
-                                         .SetQueryParam("api-version", "2022-04-01-preview")
-                                         .ToUri();
+                                         .AppendPathSegment(serviceName).ToUri();
+
+        if(!string.IsNullOrEmpty(workspaceName))
+        {
+            uri = uri.AppendPathSegment("workspaces").AppendPathSegment(workspaceName).ToUri();
+        }
+        
+        uri = uri.SetQueryParam("api-version", "2022-09-01-preview").ToUri();
 
         return new ServiceUri(uri);
     }

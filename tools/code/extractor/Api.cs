@@ -118,7 +118,7 @@ internal static class Api
     {
         var exportUri = apiUri.Uri.SetQueryParam("format", format)
                                   .SetQueryParam("export", "true")
-                                  .SetQueryParam("api-version", "2021-08-01")
+                                  .SetQueryParam("api-version", "2022-09-01-preview")
                                   .ToUri();
 
         var exportResponse = await getRestResource(exportUri, cancellationToken);

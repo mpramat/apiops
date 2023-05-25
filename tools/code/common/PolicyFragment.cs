@@ -11,7 +11,7 @@ public sealed record PolicyFragmentsUri : IArtifactUri
     public PolicyFragmentsUri(ServiceUri serviceUri)
     {
         Uri = serviceUri.AppendPath("policyFragments")
-                        .SetQueryParam("api-version", "2022-04-01-preview")
+                        .SetQueryParam("api-version", "2022-09-01-preview")
                         .ToUri();
     }
 }
