@@ -230,7 +230,7 @@ public static class Program
     private static ServiceUri GetServiceUri(IConfiguration configuration, ArmEnvironment armEnvironment)
     {
         var serviceName = configuration.TryGetValue("API_MANAGEMENT_SERVICE_NAME") ?? configuration.GetValue("apimServiceName");
-        var workspaceName = configuration.TryGetValue("API_MANAGEMENT_WORKSPACE") ?? string.Empty;
+        var workspaceName = configuration.TryGetValue("API_MANAGEMENT_WORKSPACE") ?? configuration.GetValue("apimWorkspace");
 
         var uri = armEnvironment.Endpoint.AppendPathSegment("subscriptions")
                                          .AppendPathSegment(configuration.GetValue("AZURE_SUBSCRIPTION_ID"))
